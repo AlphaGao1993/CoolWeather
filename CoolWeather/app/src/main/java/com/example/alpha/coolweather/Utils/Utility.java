@@ -1,12 +1,24 @@
 package com.example.alpha.coolweather.Utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
+import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
+import com.example.alpha.coolweather.Activity.WeatherActivity;
 import com.example.alpha.coolweather.DB.CoolWeatherDB;
 import com.example.alpha.coolweather.Model.City;
 import com.example.alpha.coolweather.Model.County;
 import com.example.alpha.coolweather.Model.Province;
+import com.example.alpha.coolweather.Model.Weather;
+import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * gson解析
@@ -23,10 +35,8 @@ public class Utility {
                     String[] array=p.split("\\|");
                     Province province=new Province();
                     province.setCode(array[0]);
-                    System.out.println(array[0]+"----------"+array[1]);
                     province.setName(array[1]);
                     coolWeatherDB.saveProvince(province);
-                    Log.d("-----------------",p);
                 }
                 return true;
             }
@@ -46,7 +56,6 @@ public class Utility {
                     city.setName(array[1]);
                     city.setProvince_id(provinceid);
                     coolWeatherDB.saveCity(city);
-                    Log.d("-----------------",p);
                 }
                 return true;
             }
@@ -66,11 +75,52 @@ public class Utility {
                     county.setName(array[1]);
                     county.setCity_id(cityid);
                     coolWeatherDB.saveCounty(county);
-                    Log.d("-----------------",p);
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    public synchronized static void handWeatherResponse(Context context,String response){
+        Gson gson=new Gson();
+        Weather weatherinfo=gson.fromJson(response,Weather.class);
+        SharedPreferences sh=PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor=sh.edit();
+        if ("1002".equals(weatherinfo.getStatus())){
+            Logger.d("该区域暂无数据");
+            editor.putBoolean("updated_success",false);
+        }else {
+            String cityname=weatherinfo.getData().getCity();
+            Weather.MForecast forecast=weatherinfo.getData().getForecast().get(0);
+            String temp1=forecast.getLow().substring(2);
+            String temp2=forecast.getHigh().substring(2);
+            String weatherDesp=forecast.getType();
+            String publishtime=forecast.getDate();
+            editor.putBoolean("updated_success",true);
+            /*JSONObject jsonObject=new JSONObject(response);
+            JSONObject weatherinfo=jsonObject.getJSONObject("weatherinfo");
+            String cityname=weatherinfo.getString("city");
+            String weathercode=weatherinfo.getString("cityid");
+            String temp1=weatherinfo.getString("temp1");
+            String temp2=weatherinfo.getString("temp2");
+            String weatherDesp=weatherinfo.getString("weather");
+            String publishtime=weatherinfo.getString("ptime");*/
+            saveWeatherInfo(context,cityname,temp1,temp2,weatherDesp,publishtime);
+        }
+        editor.apply();
+    }
+
+    private static void saveWeatherInfo(Context context, String cityname, String temp1, String temp2, String weatherDesp, String publishtime) {
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
+        SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putBoolean("city_selected",true);
+        editor.putString("city_name",cityname);
+        editor.putString("temp1",temp1);
+        editor.putString("temp2",temp2);
+        editor.putString("weather_desp",weatherDesp);
+        editor.putString("publish_time",publishtime);
+        editor.putString("current_time",sdf.format(new Date()));
+        editor.apply();
     }
 }

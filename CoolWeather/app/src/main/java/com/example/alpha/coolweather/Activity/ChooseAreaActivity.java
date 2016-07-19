@@ -2,8 +2,11 @@ package com.example.alpha.coolweather.Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -56,14 +59,17 @@ public class ChooseAreaActivity extends AppCompatActivity {
 
     private int currentLevel;//当前区域级别
 
+    private Intent intent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.choose_area);
+        intent=getIntent();
+
         mListView= (ListView) findViewById(R.id.list_view);
         mTitleText= (TextView) findViewById(R.id.title_text);
-        Logger.d("成功启动活动");
 
         //设置适配器
         adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,datalist);
@@ -79,6 +85,12 @@ public class ChooseAreaActivity extends AppCompatActivity {
                 }else if (currentLevel==LEVEL_CITY){
                     selectedCity=cityList.get(position);
                     querryCounties();
+                }else if (currentLevel==LEVEL_COUNTY){
+                    String countycode=countyList.get(position).getCode();
+                    Intent intent=new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+                    intent.putExtra("county_code",countycode);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -205,6 +217,19 @@ public class ChooseAreaActivity extends AppCompatActivity {
             querryProvinces();
         }else {
             finish();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+        if (!intent.getBooleanExtra("from_weather_activity",false)){
+            if (sharedPreferences.getBoolean("city_selected",false)){
+                Intent intent=new Intent(this,WeatherActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }

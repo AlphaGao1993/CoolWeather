@@ -1,5 +1,7 @@
 package com.example.alpha.coolweather.Utils;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,25 +22,30 @@ public class HttpUtil {
                     URL mUrl=new URL(path);
                     connection= (HttpURLConnection) mUrl.openConnection();
                     connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
-                    InputStream in=connection.getInputStream();
-                    BufferedReader reader=new BufferedReader(new InputStreamReader(in));
-                    StringBuilder response=new StringBuilder();
-                    String line;
-                    while ((line=reader.readLine())!=null){
-                        response.append(line);
+                    connection.setConnectTimeout(10000);
+                    connection.setReadTimeout(15000);
+                    int code=connection.getResponseCode();
+                    if (code==200){
+                        InputStream in=connection.getInputStream();
+                        BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+                        StringBuilder response=new StringBuilder();
+                        String line;
+                        while ((line=reader.readLine())!=null){
+                            response.append(line);
+                        }
+                        if (listener!=null){
+                            listener.onFinish(response.toString());
+                        }
+                        in.close();
+                    }else {
+                        Logger.d("网络连接失败");
                     }
-                    if (listener!=null){
-                        listener.onFinish(response.toString());
-                    }
-                    in.close();
                 } catch (java.io.IOException e) {
                     if (listener!=null){
                         listener.onError(e);
                     }
                     e.printStackTrace();
-                }finally {
+                } finally {
                     if (connection!=null){
                         connection.disconnect();
                     }
