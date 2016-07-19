@@ -13,17 +13,17 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_PROVINCE="create table Provinces("
             +"id integer primary key autoincrement,"
-            +"province_name text"
-            +"province_code text)";
+            +"name text,"
+            +"code text)";
     private static final String CREATE_CITY="create table Citys("
             +"id integer primary key autoincrement,"
-            +"city_name text"
-            +"city_code"
+            +"name text,"
+            +"code text,"
             +"province_id integer)";
-    private static final String CREATE_COUNTY="create tbale County("
+    private static final String CREATE_COUNTY="create table County("
             +"id integer primary key autoincrement,"
-            +"county_name text"
-            +"county_code"
+            +"name text,"
+            +"code text,"
             +"city_id integer)";
 
     public CoolWeatherOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

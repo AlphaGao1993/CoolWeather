@@ -35,7 +35,7 @@ public class CoolWeatherDB {
     }
 
     public synchronized static CoolWeatherDB getInsteance(Context context){
-        if (coolWeatherDB!=null){
+        if (coolWeatherDB==null){
             coolWeatherDB=new CoolWeatherDB(context);
         }
         return coolWeatherDB;
@@ -70,7 +70,6 @@ public class CoolWeatherDB {
     public void saveCity(City city){
         if (city!=null){
             ContentValues values=new ContentValues();
-            values.put("id",city.getId());
             values.put("name",city.getName());
             values.put("code",city.getCode());
             values.put("province_id",city.getProvince_id());
