@@ -9,3 +9,6 @@ Http请求使用原始的HttpUrlConnection
 
 天气界面添加了下拉刷新，不过现在还有点小Bug。
 
+展示：
+
+![](http://oa3wvfmvl.bkt.clouddn.com/coolweather.gif)
