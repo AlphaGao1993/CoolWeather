@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 public class Utility {
 
+    private static Weather weatherinfo;
+
     public synchronized static boolean handleProvincesResponse(CoolWeatherDB coolWeatherDB,
                                                                String response){
         if (!TextUtils.isEmpty(response)){
@@ -84,7 +86,7 @@ public class Utility {
 
     public synchronized static void handWeatherResponse(Context context,String response){
         Gson gson=new Gson();
-        Weather weatherinfo=gson.fromJson(response,Weather.class);
+        weatherinfo=gson.fromJson(response,Weather.class);
         SharedPreferences sh=PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor=sh.edit();
         if ("1002".equals(weatherinfo.getStatus())){
@@ -97,6 +99,8 @@ public class Utility {
             String temp2=forecast.getHigh().substring(2);
             String weatherDesp=forecast.getType();
             String publishtime=forecast.getDate();
+            String ganmao=weatherinfo.getData().getGanmao();
+            String wendu=weatherinfo.getData().getWendu();
             editor.putBoolean("updated_success",true);
             /*JSONObject jsonObject=new JSONObject(response);
             JSONObject weatherinfo=jsonObject.getJSONObject("weatherinfo");
@@ -106,12 +110,19 @@ public class Utility {
             String temp2=weatherinfo.getString("temp2");
             String weatherDesp=weatherinfo.getString("weather");
             String publishtime=weatherinfo.getString("ptime");*/
-            saveWeatherInfo(context,cityname,temp1,temp2,weatherDesp,publishtime);
+            saveWeatherInfo(context,cityname,temp1,temp2,weatherDesp,publishtime,ganmao,wendu);
         }
         editor.apply();
     }
 
-    private static void saveWeatherInfo(Context context, String cityname, String temp1, String temp2, String weatherDesp, String publishtime) {
+    public static Weather getWeatherInfo() {
+        if (weatherinfo!=null){
+            return weatherinfo;
+        }
+        return null;
+    }
+
+    private static void saveWeatherInfo(Context context, String cityname, String temp1, String temp2, String weatherDesp, String publishtime, String ganmao, String wendu) {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
         SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putBoolean("city_selected",true);
@@ -121,6 +132,8 @@ public class Utility {
         editor.putString("weather_desp",weatherDesp);
         editor.putString("publish_time",publishtime);
         editor.putString("current_time",sdf.format(new Date()));
+        editor.putString("ganmao",ganmao);
+        editor.putString("wendu",wendu);
         editor.apply();
     }
 }

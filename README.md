@@ -9,6 +9,10 @@ Http请求使用原始的HttpUrlConnection
 
 天气界面添加了下拉刷新，不过现在还有点小Bug。
 
+这个api接口数据比较丰富，不过区域覆盖不是很全面，打算继续扩展一下，做到三日内天气信息和其他附加信息的显示。
+
 展示：
 
-![](http://oa3wvfmvl.bkt.clouddn.com/coolweather.gif)
+![第一版](http://oa3wvfmvl.bkt.clouddn.com/coolweather.gif)
+
+![第二版](http://oa3wvfmvl.bkt.clouddn.com/coolweather2.gif)

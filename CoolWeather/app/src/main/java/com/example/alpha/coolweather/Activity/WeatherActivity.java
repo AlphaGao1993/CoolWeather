@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alpha.coolweather.Model.Weather;
 import com.example.alpha.coolweather.R;
 import com.example.alpha.coolweather.Services.AutoUpdateService;
 import com.example.alpha.coolweather.Utils.HttpCallbackListener;
@@ -33,6 +34,50 @@ import butterknife.OnClick;
  */
 public class WeatherActivity extends AppCompatActivity {
 
+    @BindView(R.id.date_1)
+    TextView date1;
+    @BindView(R.id.wind_direction1)
+    TextView windDirection1;
+    @BindView(R.id.wind_li1)
+    TextView windLi1;
+    @BindView(R.id.type_1)
+    TextView type1;
+    @BindView(R.id.wendu_1)
+    TextView wendu1;
+    @BindView(R.id.date_2)
+    TextView date2;
+    @BindView(R.id.wind_direction2)
+    TextView windDirection2;
+    @BindView(R.id.wind_li2)
+    TextView windLi2;
+    @BindView(R.id.type_2)
+    TextView type2;
+    @BindView(R.id.wendu_2)
+    TextView wendu2;
+    @BindView(R.id.date_3)
+    TextView date3;
+    @BindView(R.id.wind_direction3)
+    TextView windDirection3;
+    @BindView(R.id.wind_li3)
+    TextView windLi3;
+    @BindView(R.id.type_3)
+    TextView type3;
+    @BindView(R.id.wendu_3)
+    TextView wendu3;
+    @BindView(R.id.date_4)
+    TextView date4;
+    @BindView(R.id.wind_direction4)
+    TextView windDirection4;
+    @BindView(R.id.wind_li4)
+    TextView windLi4;
+    @BindView(R.id.type_4)
+    TextView type4;
+    @BindView(R.id.wendu_4)
+    TextView wendu4;
+    @BindView(R.id.tips_ganmao)
+    TextView tipsGanmao;
+    @BindView(R.id.wendu_today)
+    TextView wenduToday;
     private SharedPreferences sh;
     private String mWeathercode;
 
@@ -119,12 +164,58 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeather() {
+        showTodayWeather();
+        showFutuerWeathwr();
+    }
+
+    private void showFutuerWeathwr() {
+        Weather weather = Utility.getWeatherInfo();
+        if (weather != null) {
+            try {
+                date1.setText(weather.getData().getForecast().get(1).getDate());
+                date2.setText(weather.getData().getForecast().get(2).getDate());
+                date3.setText(weather.getData().getForecast().get(3).getDate());
+                date4.setText(weather.getData().getForecast().get(4).getDate());
+
+                windDirection1.setText(weather.getData().getForecast().get(1).getFengxiang());
+                windDirection2.setText(weather.getData().getForecast().get(2).getFengxiang());
+                windDirection3.setText(weather.getData().getForecast().get(3).getFengxiang());
+                windDirection4.setText(weather.getData().getForecast().get(4).getFengxiang());
+
+                windLi1.setText(weather.getData().getForecast().get(1).getFengli());
+                windLi2.setText(weather.getData().getForecast().get(2).getFengli());
+                windLi3.setText(weather.getData().getForecast().get(3).getFengli());
+                windLi4.setText(weather.getData().getForecast().get(4).getFengli());
+
+                type1.setText(weather.getData().getForecast().get(1).getType());
+                type2.setText(weather.getData().getForecast().get(2).getType());
+                type3.setText(weather.getData().getForecast().get(3).getType());
+                type4.setText(weather.getData().getForecast().get(4).getType());
+
+                wendu1.setText(weather.getData().getForecast().get(1).getLow().substring(3)
+                        + " ~ " + weather.getData().getForecast().get(1).getHigh().substring(3));
+                wendu2.setText(weather.getData().getForecast().get(2).getLow().substring(3)
+                        + " ~ " + weather.getData().getForecast().get(2).getHigh().substring(3));
+                wendu3.setText(weather.getData().getForecast().get(3).getLow().substring(3)
+                        + " ~ " + weather.getData().getForecast().get(3).getHigh().substring(3));
+                wendu4.setText(weather.getData().getForecast().get(4).getLow().substring(3)
+                        + " ~ " + weather.getData().getForecast().get(4).getHigh().substring(3));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this,"获取数据失败，请稍后重试",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showTodayWeather() {
         cityName.setText(sh.getString("city_name", ""));
         temp1.setText(sh.getString("temp1", ""));
         temp2.setText(sh.getString("temp2", ""));
         weatherDisp.setText(sh.getString("weather_desp", ""));
         publishText.setText(sh.getString("publish_time", "") + "更新");
-        currentDate.setText(sh.getString("current_date", ""));
+        currentDate.setText(sh.getString("current_time", ""));
+        tipsGanmao.setText(sh.getString("ganmao", ""));
+        wenduToday.setText(sh.getString("wendu",""));
         weatherInfoLayout.setVisibility(View.VISIBLE);
         cityName.setVisibility(View.VISIBLE);
         if (refeashView != null) {
