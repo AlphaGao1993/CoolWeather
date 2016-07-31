@@ -1,16 +1,13 @@
 package com.example.alpha.coolweather.Activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -89,6 +86,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                     String countycode=countyList.get(position).getCode();
                     Intent intent=new Intent(ChooseAreaActivity.this,WeatherActivity.class);
                     intent.putExtra("county_code",countycode);
+                    Logger.d(countycode);
                     startActivity(intent);
                     finish();
                 }

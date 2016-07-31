@@ -102,11 +102,21 @@ public class WeatherActivity extends AppCompatActivity {
         refeashView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refeashView.setRefreshing(true);
-                String weather_code = sh.getString("weather_code", "");
-                if (!TextUtils.isEmpty(weather_code)) {
-                    queryWeatherInfo(weather_code);
-                }
+                refeashView.setRefreshing(false);
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            String weather_code = sh.getString("weather_code", "");
+                            if (!TextUtils.isEmpty(weather_code)) {
+                                queryWeatherInfo(weather_code);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
             }
         });
         //getCpuInfo();
@@ -145,6 +155,7 @@ public class WeatherActivity extends AppCompatActivity {
         editor.apply();
         String address = "http://wthrcdn.etouch.cn/weather_mini?citykey=" + weather_code;
         queryfromServer(address, "weathercode");
+        Logger.d(address);
     }
 
     private void showWeather() {
@@ -219,13 +230,15 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void queryWeatherCode(String countyCode) {
         String address = "http://www.weather.com.cn/data/list3/city" + countyCode + ".xml";
-        queryfromServer(address, countyCode);
+        queryfromServer(address, "countycode");
+        Logger.d(countyCode);
     }
 
     private void queryfromServer(final String address, final String type) {
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
+                Logger.d(type);
                 if ("countycode".equals(type)) {
                     if (!TextUtils.isEmpty(response)) {
                         String[] array = response.split("\\|");
