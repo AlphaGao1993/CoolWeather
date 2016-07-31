@@ -19,5 +19,6 @@ Http请求使用原始的HttpUrlConnection
 
 ## update:use custom ovalWeatherView
 
-you may find the code in branch oval.
+you can find the code in branch oval.
+
 ![](http://oa3wvfmvl.bkt.clouddn.com/coolweather2.png)
