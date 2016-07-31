@@ -16,3 +16,8 @@ Http请求使用原始的HttpUrlConnection
 ![第一版](http://oa3wvfmvl.bkt.clouddn.com/coolweather.gif)
 
 ![第二版](http://oa3wvfmvl.bkt.clouddn.com/coolweather2.gif)
+
+## update:use custom ovalWeatherView
+
+you may find the code in branch oval.
+![](http://oa3wvfmvl.bkt.clouddn.com/coolweather2.png)
