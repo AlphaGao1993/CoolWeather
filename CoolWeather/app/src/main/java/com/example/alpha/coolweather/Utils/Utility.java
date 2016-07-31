@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.widget.ShareActionProvider;
-import android.widget.Toast;
 
-import com.example.alpha.coolweather.Activity.WeatherActivity;
 import com.example.alpha.coolweather.DB.CoolWeatherDB;
 import com.example.alpha.coolweather.Model.City;
 import com.example.alpha.coolweather.Model.County;
@@ -99,6 +96,8 @@ public class Utility {
             String temp2=forecast.getHigh().substring(2);
             String weatherDesp=forecast.getType();
             String publishtime=forecast.getDate();
+            String fengli=forecast.getFengli();
+            String fengxiang=forecast.getFengxiang();
             String ganmao=weatherinfo.getData().getGanmao();
             String wendu=weatherinfo.getData().getWendu();
             editor.putBoolean("updated_success",true);
@@ -110,7 +109,7 @@ public class Utility {
             String temp2=weatherinfo.getString("temp2");
             String weatherDesp=weatherinfo.getString("weather");
             String publishtime=weatherinfo.getString("ptime");*/
-            saveWeatherInfo(context,cityname,temp1,temp2,weatherDesp,publishtime,ganmao,wendu);
+            saveWeatherInfo(context,cityname,temp1,temp2,weatherDesp,publishtime,ganmao,wendu,fengli,fengxiang);
         }
         editor.apply();
     }
@@ -122,7 +121,7 @@ public class Utility {
         return null;
     }
 
-    private static void saveWeatherInfo(Context context, String cityname, String temp1, String temp2, String weatherDesp, String publishtime, String ganmao, String wendu) {
+    private static void saveWeatherInfo(Context context, String cityname, String temp1, String temp2, String weatherDesp, String publishtime, String ganmao, String wendu, String fengli, String fengxiang) {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
         SharedPreferences.Editor editor= PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putBoolean("city_selected",true);
@@ -134,6 +133,8 @@ public class Utility {
         editor.putString("current_time",sdf.format(new Date()));
         editor.putString("ganmao",ganmao);
         editor.putString("wendu",wendu);
+        editor.putString("fengli",fengli);
+        editor.putString("fengxiang",fengxiang);
         editor.apply();
     }
 }

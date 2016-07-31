@@ -216,6 +216,8 @@ public class WeatherActivity extends AppCompatActivity {
         ovalWeather.setCurrentTemperature(Integer.parseInt(sh.getString("wendu", "0")));
         //wenduToday.setText(sh.getString("wendu", ""));
         //weatherInfoLayout.setVisibility(View.VISIBLE);
+        ovalWeather.setWeatherWind(sh.getString("fengxiang","")+" | "+sh.getString("fengli",""));
+        ovalWeather.apply();
         if (refeashView != null) {
             refeashView.setRefreshing(false);
         }

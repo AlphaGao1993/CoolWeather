@@ -78,6 +78,10 @@ public class OvalDegree extends View {
      */
     private int currentTemperature = 0;
     /**
+     * 风力状况
+     */
+    private String weatherWind = "";
+    /**
      * 天气状况，显示在刻度盘底部
      */
     private String weatherType = "";
@@ -183,8 +187,10 @@ public class OvalDegree extends View {
 
         mTextPaint.setTextSize(getDefaultMinWidth() / 6.25f);
         canvas.drawText(getCurrentTemperature() + "℃", mCenter, mCenter + getDefaultMinWidth() / 20, mTextPaint);
-        mTextPaint.setTextSize(getDefaultMinWidth() / 15f);
-        canvas.drawText(getWeatherType(), mCenter, mCenter + c, mTextPaint);
+        mTextPaint.setTextSize(getDefaultMinWidth() / 10f);
+        canvas.drawText(getWeatherType(), mCenter, mCenter + x, mTextPaint);
+        mTextPaint.setTextSize(getDefaultMinWidth() / 20f);
+        canvas.drawText(getWeatherWind(), mCenter, mCenter + c, mTextPaint);
         mTextPaint.setTextSize(getDefaultMinWidth() / 30f);//需要将画笔文字大小设为初始值
     }
 
@@ -266,7 +272,6 @@ public class OvalDegree extends View {
     public void setMinTemperature(int minTemperature) {
         if (minTemperature >= startDegree && minTemperature <= maxTemperature) {
             this.minTemperature = minTemperature;
-            invalidate();
         } else {
             setRangeError();
         }
@@ -292,7 +297,6 @@ public class OvalDegree extends View {
     public void setMaxTemperature(int maxTemperature) {
         if (maxTemperature <= endDegree && maxTemperature >= minTemperature) {
             this.maxTemperature = maxTemperature;
-            invalidate();
         } else {
             setRangeError();
         }
@@ -350,7 +354,6 @@ public class OvalDegree extends View {
      */
     public void setDrawScale(boolean drawScale) {
         this.drawScale = drawScale;
-        invalidate();
     }
 
     /**
@@ -367,5 +370,23 @@ public class OvalDegree extends View {
      */
     public void setDefaultMinWidth(int defaultMinWidth) {
         this.defaultMinWidth = defaultMinWidth;
+    }
+
+    /**
+     * 设置完参数后调用该方法进行重绘
+     */
+    public void apply(){
+        invalidate();
+    }
+
+    /**
+     * 风力状况
+     */
+    public String getWeatherWind() {
+        return weatherWind;
+    }
+
+    public void setWeatherWind(String weatherWind) {
+        this.weatherWind = weatherWind;
     }
 }
